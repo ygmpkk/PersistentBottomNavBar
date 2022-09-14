@@ -8,6 +8,7 @@ class NavBarEssentials {
   final ValueChanged<int>? onItemSelected;
   final double? navBarHeight;
   final NavBarPadding? padding;
+  final EdgeInsets? titlePadding;
   final bool? popScreensOnTapOfSelectedTab;
   final bool? popAllScreensOnTapAnyTabs;
   final ItemAnimationProperties? itemAnimationProperties;
@@ -25,6 +26,7 @@ class NavBarEssentials {
     required this.items,
     this.onItemSelected,
     this.padding,
+    this.titlePadding,
     this.selectedScreenBuildContext,
   });
 
@@ -49,6 +51,7 @@ class NavBarEssentials {
       onItemSelected: onItemSelected ?? this.onItemSelected,
       navBarHeight: navBarHeight ?? this.navBarHeight,
       padding: padding ?? this.padding,
+      titlePadding: titlePadding ?? this.titlePadding,
       popScreensOnTapOfSelectedTab:
           popScreensOnTapOfSelectedTab ?? this.popScreensOnTapOfSelectedTab,
       itemAnimationProperties:

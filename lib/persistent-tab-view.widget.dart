@@ -75,6 +75,7 @@ class PersistentTabView extends PersistentTabViewBase {
       NeumorphicProperties? neumorphicProperties,
       this.floatingActionButton,
       NavBarPadding padding = const NavBarPadding.all(null),
+      EdgeInsets titlePadding = const EdgeInsets.only(top: 15.0),
       NavBarDecoration decoration = const NavBarDecoration(),
       this.resizeToAvoidBottomInset = false,
       this.bottomScreenMargin,
@@ -99,6 +100,7 @@ class PersistentTabView extends PersistentTabViewBase {
           margin: margin,
           items: items,
           padding: padding,
+          titlePadding: titlePadding,
           decoration: decoration,
           hideNavigationBarWhenKeyboardShows:
               hideNavigationBarWhenKeyboardShows,
@@ -210,6 +212,7 @@ class PersistentTabViewBase extends StatefulWidget {
   ///
   ///`USE WITH CAUTION, MAY CAUSE LAYOUT ISSUES`.
   final NavBarPadding? padding;
+  final EdgeInsets? titlePadding;
 
   ///Style for persistent bottom navigation bar. Accepts `NavBarStyle` to determine the theme.
   final NavBarStyle? navBarStyle;
@@ -308,6 +311,7 @@ class PersistentTabViewBase extends StatefulWidget {
     this.onItemSelected,
     this.decoration,
     this.padding,
+    this.titlePadding,
     this.navBarStyle,
     this.neumorphicProperties,
     this.navBarHeight,
@@ -568,97 +572,97 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   Widget navigationBarWidget() => PersistentTabScaffold(
-          controller: _controller,
-          itemCount: widget.items == null
-              ? widget.itemCount ?? 0
-              : widget.items!.length,
-          bottomScreenMargin:
-              widget.hideNavigationBar != null && widget.hideNavigationBar!
-                  ? 0.0
-                  : widget.bottomScreenMargin,
-          stateManagement: widget.stateManagement,
-          screenTransitionAnimation: widget.screenTransitionAnimation,
-          hideNavigationBarWhenKeyboardShows:
-              widget.hideNavigationBarWhenKeyboardShows,
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          animatePadding: _isAnimating! || _isCompleted!,
-          tabBar: PersistentBottomNavBar(
-            navBarEssentials: NavBarEssentials(
-              selectedIndex: _controller!.index,
-              previousIndex: _previousIndex,
-              padding: widget.padding,
-              selectedScreenBuildContext: _contextList[_controller!.index],
-              itemAnimationProperties: widget.itemAnimationProperties,
-              items: widget.items,
-              backgroundColor: widget.backgroundColor,
-              navBarHeight: _navBarHeight,
-              popScreensOnTapOfSelectedTab:
-                  widget.popAllScreensOnTapOfSelectedTab ?? true,
-              popAllScreensOnTapAnyTabs:
-                  widget.popAllScreensOnTapAnyTabs ?? false,
-              onItemSelected: widget.onItemSelected != null
-                  ? (int index) {
-                      if (_controller!.index != _previousIndex) {
-                        _previousIndex = _controller!.index;
-                      }
-                      if (((widget.popAllScreensOnTapOfSelectedTab ?? true) &&
-                              _previousIndex == index) ||
-                          (widget.popAllScreensOnTapAnyTabs ?? false)) {
-                        popAllScreens();
-                      }
-                      _controller!.index = index;
-                      widget.onItemSelected!(index);
+        controller: _controller,
+        itemCount:
+            widget.items == null ? widget.itemCount ?? 0 : widget.items!.length,
+        bottomScreenMargin:
+            widget.hideNavigationBar != null && widget.hideNavigationBar!
+                ? 0.0
+                : widget.bottomScreenMargin,
+        stateManagement: widget.stateManagement,
+        screenTransitionAnimation: widget.screenTransitionAnimation,
+        hideNavigationBarWhenKeyboardShows:
+            widget.hideNavigationBarWhenKeyboardShows,
+        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+        animatePadding: _isAnimating! || _isCompleted!,
+        tabBar: PersistentBottomNavBar(
+          navBarEssentials: NavBarEssentials(
+            selectedIndex: _controller!.index,
+            previousIndex: _previousIndex,
+            padding: widget.padding,
+            titlePadding: widget.titlePadding,
+            selectedScreenBuildContext: _contextList[_controller!.index],
+            itemAnimationProperties: widget.itemAnimationProperties,
+            items: widget.items,
+            backgroundColor: widget.backgroundColor,
+            navBarHeight: _navBarHeight,
+            popScreensOnTapOfSelectedTab:
+                widget.popAllScreensOnTapOfSelectedTab ?? true,
+            popAllScreensOnTapAnyTabs:
+                widget.popAllScreensOnTapAnyTabs ?? false,
+            onItemSelected: widget.onItemSelected != null
+                ? (int index) {
+                    if (_controller!.index != _previousIndex) {
+                      _previousIndex = _controller!.index;
                     }
-                  : (int index) {
-                      if (_controller!.index != _previousIndex) {
-                        _previousIndex = _controller!.index;
-                      }
-                      if (((widget.popAllScreensOnTapOfSelectedTab ?? true) &&
-                              _previousIndex == index) ||
-                          (widget.popAllScreensOnTapAnyTabs ?? false)) {
-                        popAllScreens();
-                      }
-                      // popAllScreens();
-                      _controller!.index = index;
-                    },
-            ),
-            isCustomWidget: widget.isCustomWidget,
-            navBarDecoration: widget.decoration,
-            margin: widget.margin,
-            confineToSafeArea: widget.confineInSafeArea,
-            hideNavigationBar: widget.hideNavigationBar,
-            navBarStyle: widget.navBarStyle,
-            neumorphicProperties: widget.neumorphicProperties,
-            customNavBarWidget: widget.customWidget,
-            onAnimationComplete: (isAnimating, isCompleted) {
-              if (_isAnimating != isAnimating) {
-                setState(() {
-                  _isAnimating = isAnimating;
-                });
-              }
-              if (_isCompleted != isCompleted) {
-                setState(() {
-                  _isCompleted = isCompleted;
-                });
-              }
-            },
+                    if (((widget.popAllScreensOnTapOfSelectedTab ?? true) &&
+                            _previousIndex == index) ||
+                        (widget.popAllScreensOnTapAnyTabs ?? false)) {
+                      popAllScreens();
+                    }
+                    _controller!.index = index;
+                    widget.onItemSelected!(index);
+                  }
+                : (int index) {
+                    if (_controller!.index != _previousIndex) {
+                      _previousIndex = _controller!.index;
+                    }
+                    if (((widget.popAllScreensOnTapOfSelectedTab ?? true) &&
+                            _previousIndex == index) ||
+                        (widget.popAllScreensOnTapAnyTabs ?? false)) {
+                      popAllScreens();
+                    }
+                    // popAllScreens();
+                    _controller!.index = index;
+                  },
           ),
-          tabBuilder: (BuildContext context, int index) {
-            return SafeArea(
-              top: false,
-              right: false,
-              left: false,
-              bottom: (widget.items != null &&
-                          widget.items![_controller!.index].opacity < 1.0) ||
-                      (widget.hideNavigationBar != null && _isCompleted!)
-                  ? false
-                  : widget.margin.bottom > 0
-                      ? false
-                      : widget.confineInSafeArea,
-              child: _buildScreen(index),
-            );
+          isCustomWidget: widget.isCustomWidget,
+          navBarDecoration: widget.decoration,
+          margin: widget.margin,
+          confineToSafeArea: widget.confineInSafeArea,
+          hideNavigationBar: widget.hideNavigationBar,
+          navBarStyle: widget.navBarStyle,
+          neumorphicProperties: widget.neumorphicProperties,
+          customNavBarWidget: widget.customWidget,
+          onAnimationComplete: (isAnimating, isCompleted) {
+            if (_isAnimating != isAnimating) {
+              setState(() {
+                _isAnimating = isAnimating;
+              });
+            }
+            if (_isCompleted != isCompleted) {
+              setState(() {
+                _isCompleted = isCompleted;
+              });
+            }
           },
-        );
+        ),
+        tabBuilder: (BuildContext context, int index) {
+          return SafeArea(
+            top: false,
+            right: false,
+            left: false,
+            bottom: (widget.items != null &&
+                        widget.items![_controller!.index].opacity < 1.0) ||
+                    (widget.hideNavigationBar != null && _isCompleted!)
+                ? false
+                : widget.margin.bottom > 0
+                    ? false
+                    : widget.confineInSafeArea,
+            child: _buildScreen(index),
+          );
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
